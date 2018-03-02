@@ -61,7 +61,6 @@ class TwitterBot:
         wait_time = random.randint(min_time, max_time)
 
         if wait_time > 0:
-            print("Choosing time between %d and %d - waiting %d seconds before action" % (min_time, max_time, wait_time))
             time.sleep(wait_time)
 
         return wait_time
@@ -168,10 +167,6 @@ class TwitterBot:
         following = set(following_status["ids"])
         next_cursor = following_status["next_cursor"]
 
-        with open(self.BOT_CONFIG["FOLLOWS_FILE"], "w") as out_file:
-            for follow in following:
-                out_file.write("%s\n" % (follow))
-
         while next_cursor != 0:
             following_status = self.TWITTER_CONNECTION.friends.ids(screen_name=self.BOT_CONFIG["TWITTER_HANDLE"],
                                                                    cursor=next_cursor)
@@ -237,9 +232,9 @@ class TwitterBot:
                 # don't favorite your own tweets
                 if tweet["user"]["screen_name"] == self.BOT_CONFIG["TWITTER_HANDLE"]:
                     continue
-                
+
                 self.wait_on_action()
-                
+
                 result = self.TWITTER_CONNECTION.favorites.create(_id=tweet["id"])
                 print("Favorited: %s" % (result["text"].encode("utf-8")), file=sys.stdout)
 
@@ -266,9 +261,9 @@ class TwitterBot:
                 # don't retweet your own tweets
                 if tweet["user"]["screen_name"] == self.BOT_CONFIG["TWITTER_HANDLE"]:
                     continue
-                
+
                 self.wait_on_action()
-                
+
                 result = self.TWITTER_CONNECTION.statuses.retweet(id=tweet["id"])
                 print("Retweeted: %s" % (result["text"].encode("utf-8")), file=sys.stdout)
 
@@ -330,7 +325,7 @@ class TwitterBot:
         not_following_back = list(not_following_back)[:count]
         for user_id in not_following_back:
             try:
-                self.wait_on_action()
+                time.sleep(random.randint(5, 8))
 
                 self.TWITTER_CONNECTION.friendships.create(user_id=user_id, follow=False)
             except TwitterHTTPError as api_error:
@@ -363,6 +358,44 @@ class TwitterBot:
 
                     self.TWITTER_CONNECTION.friendships.create(user_id=user_id, follow=False)
                     print("Followed %s" % user_id, file=sys.stdout)
+
+            except TwitterHTTPError as api_error:
+                # quit on rate limit errors
+                if "unable to follow more people at this time" in str(api_error).lower():
+                    print("You are unable to follow more people at this time. "
+                          "Wait a while before running the bot again or gain "
+                          "more followers.", file=sys.stderr)
+                    return
+
+                # don't print "already requested to follow" errors - they're
+                # frequent
+                if "already requested to follow" not in str(api_error).lower():
+                    print("Error: %s" % (str(api_error)), file=sys.stderr)
+
+    def bot_follow_unixty(self, user_twitter_handle, count=100):
+        """
+            Follows the followers of a specified user, after 12 hours sync follows,
+            autofollow followers, and continue following followers of user
+        """
+
+        following = self.get_follows_list()
+        followers_of_user = set(self.TWITTER_CONNECTION.followers.ids(screen_name=user_twitter_handle)["ids"][:count])
+        do_not_follow = self.get_do_not_follow_list()
+
+        for user_id in followers_of_user:
+            try:
+                work_time = time.clock()
+
+                if work_time >= (12*60*60):
+                    sync_follows()
+                    auto_follow_followers()
+
+                if (user_id not in following and
+                        user_id not in do_not_follow):
+
+                    self.wait_on_action()
+
+                    self.TWITTER_CONNECTION.friendships.create(user_id=user_id, follow=False)
 
             except TwitterHTTPError as api_error:
                 # quit on rate limit errors
@@ -455,19 +488,19 @@ class TwitterBot:
         """
 
         return self.TWITTER_CONNECTION.statuses.update(status=message)
-    
+
     def auto_add_to_list(self, phrase, list_slug, count=100, result_type="recent"):
         """
             Add users to list slug that are tweeting phrase.
         """
-        
+
         result = self.search_tweets(phrase, count, result_type)
-        
+
         for tweet in result["statuses"]:
             try:
                 if tweet["user"]["screen_name"] == self.BOT_CONFIG["TWITTER_HANDLE"]:
                     continue
-                
+
                 result = self.TWITTER_CONNECTION.lists.members.create(owner_screen_name=self.BOT_CONFIG["TWITTER_HANDLE"],
                                                                       slug=list_slug,
                                                                       screen_name=tweet["user"]["screen_name"])
