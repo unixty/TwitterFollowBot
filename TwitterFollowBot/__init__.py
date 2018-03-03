@@ -167,6 +167,10 @@ class TwitterBot:
         following = set(following_status["ids"])
         next_cursor = following_status["next_cursor"]
 
+        with open(self.BOT_CONFIG["FOLLOWS_FILE"], "w") as out_file:
+            for follow in following:
+                out_file.write("%s\n" % (follow))
+
         while next_cursor != 0:
             following_status = self.TWITTER_CONNECTION.friends.ids(screen_name=self.BOT_CONFIG["TWITTER_HANDLE"],
                                                                    cursor=next_cursor)
@@ -176,6 +180,7 @@ class TwitterBot:
             with open(self.BOT_CONFIG["FOLLOWS_FILE"], "a") as out_file:
                 for follow in following:
                     out_file.write("%s\n" % (follow))
+
 
     def get_do_not_follow_list(self):
         """
