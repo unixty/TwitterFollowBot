@@ -403,7 +403,7 @@ class TwitterBot:
         for user_id in not_following_back:
             if user_id not in self.BOT_CONFIG["USERS_KEEP_FOLLOWING"]:
 
-                self.wait_on_action()
+                time.sleep(random.randint(10, 20))
 
                 self.TWITTER_CONNECTION.friendships.destroy(user_id=user_id)
 
