@@ -302,9 +302,6 @@ class TwitterBot:
                     self.TWITTER_CONNECTION.friendships.create(user_id=tweet["user"]["id"], follow=False)
                     following.update(set([tweet["user"]["id"]]))
 
-                    print("Followed %s" %
-                          (tweet["user"]["screen_name"]), file=sys.stdout)
-
             except TwitterHTTPError as api_error:
                 # quit on rate limit errors
                 if "unable to follow more people at this time" in str(api_error).lower():
