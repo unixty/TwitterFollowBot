@@ -49,8 +49,14 @@ while True:
             my_bot.sync_follows()
             my_bot.auto_follow_followers()
             time.sleep(random.randint(3*60*60, 4*60*60))
-            i+=1
-            if i == 5:
+
+            following_bot = my_bot.get_follows_list()
+            followers_bot = my_bot.get_followers_list()
+            not_following_back_bot = following_bot - followers_bot
+            not_following_back_bot = list(not_following_back_bot)[:count]
+
+            if len(not_following_back_bot) >= 1000:
+
                 time.sleep(random.randint(15*60*60, 20*60*60))
                 for i in range(2):
                     random.seed()
@@ -59,6 +65,7 @@ while True:
                     time.sleep(random.randint(19*60*60, 24*60*60))
 
                 my_bot.sync_follows()
+                
                 non_unfollow = []
                 with open('non_followers.txt', "r") as in_file:
                     for line in in_file:
