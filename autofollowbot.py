@@ -2,7 +2,7 @@ from TwitterFollowBot import TwitterBot
 import random
 import time
 config = 'config.txt'
-
+i = 0
 while True:
     my_bot = TwitterBot(config)
     stars = '*' * 15
@@ -32,7 +32,9 @@ while True:
         my_bot.auto_follow("#FollowBack #Bounty", count=1000)
 
     if command == 'b':
-        if not os.path.isfile('followers.txt'):
+        test_sync = input("Sinc follows(y or n)? ")
+
+        if test_sync == "y":
             my_bot.sync_follows()
 
         while True:
@@ -53,7 +55,7 @@ while True:
             not_following_back_bot = following_bot - followers_bot
             not_following_back_bot = list(not_following_back_bot)
 
-            if len(not_following_back_bot) >= 700:
+            if len(not_following_back_bot) >= 1000:
 
                 time.sleep(random.randint(15*60*60, 20*60*60))
                 for i in range(2):
@@ -76,6 +78,7 @@ while True:
                 my_bot.auto_unfollow_nonfollowers()
                 time.sleep(random.randint(7*60*60, 10*60*60))
                 my_bot.sync_follows()
+                i = 0
 
     if command == 'bf':
         while True:
