@@ -36,8 +36,11 @@ while True:
             my_bot.sync_follows()
 
         while True:
+            print('Starting bot%s' % (stars))
+            print(time.asctime())
+
             random.seed() # N0onsense  99.4
-            my_bot.auto_follow_followers_of_user('vasial9', count = random.randint(80, 130))
+            my_bot.auto_follow_followers_of_user('vasial9', count = random.randint(90, 130))
             time.sleep(random.randint(7*60*60, 9*60*60))
 
             my_bot.sync_follows()
@@ -54,14 +57,17 @@ while True:
             not_following_back_bot = list(not_following_back_bot)
 
             if len(not_following_back_bot) >= 700:
+                print('Waiting 2 days%s' % (stars))
+                print(time.asctime())
 
-                time.sleep(random.randint(15*60*60, 20*60*60))
-                for i in range(2):
+                time.sleep(random.randint(22*60*60, 27*60*60))
 
-                    my_bot.sync_follows()
-                    my_bot.auto_follow_followers()
-                    time.sleep(random.randint(19*60*60, 24*60*60))
+                my_bot.sync_follows()
+                my_bot.auto_follow_followers()
 
+                time.sleep(random.randint(22*60*60, 27*60*60))
+
+                print('Starting unfollow%s' % (stars))
                 my_bot.sync_follows()
 
                 non_unfollow = []
@@ -74,7 +80,7 @@ while True:
                         out_file.write("%s\n" % (follower))
 
                 my_bot.auto_unfollow_nonfollowers()
-                time.sleep(random.randint(7*60*60, 10*60*60))
+                time.sleep(random.randint(6*60*60, 9*60*60))
                 my_bot.sync_follows()
 
     if command == 'bf':
