@@ -350,6 +350,7 @@ class TwitterBot:
         following = self.get_follows_list()
         followers_of_user = set(self.TWITTER_CONNECTION.followers.ids(screen_name=user_twitter_handle)["ids"][:count])
         do_not_follow = self.get_do_not_follow_list()
+        i = 0
 
         for user_id in followers_of_user:
             try:
@@ -357,7 +358,7 @@ class TwitterBot:
                         user_id not in do_not_follow):
 
                     self.wait_on_action()
-
+                    i += 1
                     self.TWITTER_CONNECTION.friendships.create(user_id=user_id, follow=False)
 
             except TwitterHTTPError as api_error:
@@ -372,7 +373,7 @@ class TwitterBot:
                 # frequent
                 if "already requested to follow" not in str(api_error).lower():
                     print("Error: %s" % (str(api_error)), file=sys.stderr)
-
+        print('Number of connections for the session is', i)
 
     def auto_unfollow_nonfollowers(self,count=None):
         """
