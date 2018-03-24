@@ -44,16 +44,14 @@ while True:
 
                 print('%sPhase of follow 1%s' % (stars, stars))
                 print(time.asctime(), '\n')
+                my_bot.auto_follow_followers_of_user('vasial9', count = random.randint(70, 110))
 
-                random.seed() # N0onsense  99.4
-                my_bot.auto_follow_followers_of_user('vasial9', count = random.randint(90, 130))
                 print('%sWaiting%s' % (stars, stars))
+                random.seed() # N0onsense  99.4
+                time.sleep(random.randint(9*60*60, 12*60*60))
 
-                time.sleep(random.randint(7*60*60, 9*60*60))
                 print('%sPhase of follow 2%s' % (stars, stars))
-
-                my_bot.sync_follows()
-                my_bot.auto_follow_followers_of_user('vasial9', count = random.randint(90, 130))
+                my_bot.auto_follow_followers_of_user('vasial9', count = random.randint(70, 110))
 
                 print('%sWaiting%s' % (stars, stars))
                 time.sleep(random.randint(5*60*60, 6*60*60))
@@ -68,18 +66,17 @@ while True:
             else:
                 print('%sWaiting 2 days%s' % (stars, stars))
                 print(time.asctime(), '\n')
-
-                time.sleep(random.randint(22*60*60, 27*60*60))
+                time.sleep(random.randint(23*60*60, 26*60*60))
 
                 my_bot.sync_follows()
                 my_bot.auto_follow_followers()
 
-                time.sleep(random.randint(22*60*60, 27*60*60))
+                time.sleep(random.randint(23*60*60, 24*60*60))
 
                 print('%sPhase of unfollow nonfollowers%s' % (stars, stars))
                 print(time.asctime(), '\n')
-                my_bot.sync_follows()
 
+                my_bot.sync_follows()
                 non_unfollow = []
                 with open('non_followers.txt', "r") as in_file:
                     for line in in_file:
@@ -91,15 +88,16 @@ while True:
 
                 my_bot.auto_unfollow_nonfollowers()
                 print('%sWaiting%s' % (stars, stars))
-                time.sleep(random.randint(6*60*60, 9*60*60))
+                time.sleep(random.randint(15*60*60, 20*60*60))
                 my_bot.sync_follows()
+
 
         if command == 'bf':
             while True:
                 random.seed()
                 my_bot.sync_follows()
                 my_bot.auto_follow_followers()
-                time.sleep(random.randint(20*60*60, 25*60*60))
+                time.sleep(random.randint(23.5*60*60, 24.5*60*60))
 
         if command == 'bfunf':
 
@@ -107,7 +105,7 @@ while True:
             for i in range(2):
                 my_bot.sync_follows()
                 my_bot.auto_follow_followers()
-                time.sleep(random.randint(19*60*60, 24*60*60))
+                time.sleep(random.randint(22*60*60, 24*60*60))
 
             non_unfollow = []
             with open('non_followers.txt', "r") as in_file:
