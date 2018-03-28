@@ -1,6 +1,7 @@
 from TwitterFollowBot import TwitterBot
 import random
 import time
+import os
 config = 'config.txt'
 
 while True:
