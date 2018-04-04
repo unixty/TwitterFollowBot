@@ -41,29 +41,28 @@ while True:
             not_following_back_bot = following_bot - followers_bot
             not_following_back_bot = list(not_following_back_bot)
 
-            if len(not_following_back_bot) < 700:
+            if len(not_following_back_bot) < 900:
 
-                print('%sPhase of follow 1%s' % (stars, stars))
+                print('%sPhase of follow #1%s' % (stars, stars))
                 print(time.asctime(), '\n')
-                my_bot.auto_follow_followers_of_user('vasial9', count = random.randint(70, 110))
+                my_bot.auto_follow_followers_of_user('vasial9', count = random.randint(80, 110))
 
-                print('%sWaiting%s' % (stars, stars))
+                print('%sWaiting 11h%s' % (stars, stars))
                 random.seed() # N0onsense  99.4
                 time.sleep(random.randint(9*60*60, 12*60*60))
 
-                print('%sPhase of follow 2%s' % (stars, stars))
-                my_bot.auto_follow_followers_of_user('vasial9', count = random.randint(70, 110))
+                print('%sPhase of follow #2%s' % (stars, stars))
+                my_bot.auto_follow_followers_of_user('vasial9', count = random.randint(80, 110))
 
-                print('%sWaiting%s' % (stars, stars))
+                print('%sWaiting 5h%s' % (stars, stars))
                 time.sleep(random.randint(5*60*60, 6*60*60))
 
                 print('%sPhase of follow followers%s' % (stars, stars))
                 my_bot.sync_follows()
                 my_bot.auto_follow_followers()
 
-                print('%sWaiting%s' % (stars, stars))
+                print('%sWaiting 3h%s' % (stars, stars))
                 time.sleep(random.randint(3*60*60, 4*60*60))
-
             else:
                 print('%sWaiting 2 days%s' % (stars, stars))
                 print(time.asctime(), '\n')

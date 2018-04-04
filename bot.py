@@ -9,7 +9,14 @@ my_bot = TwitterBot(config)
 stars = '*' * 10
 
 if not os.path.isfile('followers.txt'):
+    print('%sPhase of follow followers%s' % (stars, stars))
+    print(time.asctime(), '\n')
     my_bot.sync_follows()
+    my_bot.auto_follow_followers()
+
+    print('%sWaiting 6-7h%s' % (stars, stars))
+    print(time.asctime(), '\n')
+    time.sleep(random.randint(6*60*60, 7*60*60))
 
 while True:
     following_bot = my_bot.get_follows_list()
@@ -17,27 +24,33 @@ while True:
     not_following_back_bot = following_bot - followers_bot
     not_following_back_bot = list(not_following_back_bot)
 
-    if len(not_following_back_bot) < 700:
+    if len(not_following_back_bot) < 900:
 
-        print('%sPhase of follow 1%s' % (stars, stars))
+        print('%sPhase of follow #1%s' % (stars, stars))
+        print(time.asctime(), '\n') #_FireAnt - 100% audit, vasial9 99.5
+        my_bot.auto_follow_followers_of_user('_FireAnt', count = random.randint(180, 210))
+
+        print('%sWaiting 8.5-10.5h%s' % (stars, stars))
         print(time.asctime(), '\n')
-        my_bot.auto_follow_followers_of_user('vasial9', count = random.randint(70, 110))
+        random.seed()
+        time.sleep(random.randint(8.5*60*60, 10.5*60*60))
 
-        print('%sWaiting 11h%s' % (stars, stars))
-        random.seed() # N0onsense  99.4
-        time.sleep(random.randint(9*60*60, 12*60*60))
+        print('%sPhase of follow #2%s' % (stars, stars))
+        print(time.asctime(), '\n')
+        my_bot.auto_follow_followers_of_user('_FireAnt', count = random.randint(180, 210))
 
-        print('%sPhase of follow 2%s' % (stars, stars))
-        my_bot.auto_follow_followers_of_user('vasial9', count = random.randint(70, 110))
-
-        print('%sWaiting 5h%s' % (stars, stars))
+        print('%sWaiting 5-6h%s' % (stars, stars))
+        print(time.asctime(), '\n')
         time.sleep(random.randint(5*60*60, 6*60*60))
 
         print('%sPhase of follow followers%s' % (stars, stars))
+        print(time.asctime(), '\n')
         my_bot.sync_follows()
         my_bot.auto_follow_followers()
 
-        print('%sWaiting 3h%s' % (stars, stars))
+
+        print('%sWaiting 3-4h%s' % (stars, stars))
+        print(time.asctime(), '\n')
         time.sleep(random.randint(3*60*60, 4*60*60))
 
     else:
