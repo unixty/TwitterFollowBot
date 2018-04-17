@@ -84,47 +84,86 @@ while True:
                 print(time.asctime(), '\n')
 
                 my_bot.sync_follows()
+
                 non_unfollow = []
                 with open('non_followers.txt', "r") as in_file:
                     for line in in_file:
                         non_unfollow.append(int(line))
 
                 with open('followers.txt', "a") as out_file:
-                    for follower in non_unfollow:
-                        out_file.write("%s\n" % (follower))
+                    for following in non_unfollow:
+                        out_file.write("%s\n" % (following))
 
                 my_bot.auto_unfollow_nonfollowers()
+
+                #check for followers in already_follow
+                followers_a = []
+                with open('followers.txt', "r") as followers_txt:
+                    for  follower in followers_txt:
+                        followers_a.append(int(follower))
+                alr_follow = []
+                with open('/home/scripts/twitter/already-followed.txt', "r") as already_txt:
+                    for non_follower in already_txt:
+                        alr_follow.append(int(non_follower))
+                i = 0
+                while i < len(alr_follow):
+                    if (alr_follow[i] in followers_a):
+                        del alr_follow[i]
+                    i += 1
+
+                with open('/home/scripts/twitter/already-followed.txt', "w") as out_file:
+                    for non_follower in alr_follow:
+                        out_file.write("%s\n" % (non_follower))
+
                 print('%sWaiting 17h%s' % (stars, stars))
                 time.sleep(random.randint(15*60*60, 20*60*60))
                 my_bot.sync_follows()
 
+    if command == 'del_alr':
+#check for followers in already_follow
+        followers_a = []
+        with open('followers.txt', "r") as followers_txt:
+            for  follower in followers_txt:
+                followers_a.append(int(follower))
+        alr_follow = []
+        with open('/home/scripts/twitter/already-followed.txt', "r") as already_txt:
+            for non_follower in already_txt:
+                alr_follow.append(int(non_follower))
+        i = 0
+        while i < len(alr_follow):
+            if (alr_follow[i] in followers_a):
+                del alr_follow[i]
+            i += 1
 
+        with open('/home/scripts/twitter/already-followed.txt', "w") as out_file:
+            for non_follower in alr_follow:
+                out_file.write("%s\n" % (non_follower))
 
-        if command == 'bf':
-            while True:
-                random.seed()
-                my_bot.sync_follows()
-                my_bot.auto_follow_followers()
-                time.sleep(random.randint(23.5*60*60, 24.5*60*60))
-
-        if command == 'bfunf':
-
+    if command == 'bf':
+        while True:
             random.seed()
-            for i in range(2):
-                my_bot.sync_follows()
-                my_bot.auto_follow_followers()
-                time.sleep(random.randint(22*60*60, 24*60*60))
+            my_bot.sync_follows()
+            my_bot.auto_follow_followers()
+            time.sleep(random.randint(23.5*60*60, 24.5*60*60))
 
-            non_unfollow = []
-            with open('non_followers.txt', "r") as in_file:
-                for line in in_file:
-                    non_unfollow.append(int(line))
+    if command == 'bfunf':
 
-            with open('followers.txt', "a") as out_file:
-                for follower in non_unfollow:
-                    out_file.write("%s\n" % (follower))
+        random.seed()
+        for i in range(2):
+            my_bot.sync_follows()
+            my_bot.auto_follow_followers()
+            time.sleep(random.randint(22*60*60, 24*60*60))
 
-            my_bot.auto_unfollow_nonfollowers()
+        non_unfollow = []
+        with open('non_followers.txt', "r") as in_file:
+            for line in in_file:
+                non_unfollow.append(int(line))
+
+        with open('followers.txt', "a") as out_file:
+            for follower in non_unfollow:
+                out_file.write("%s\n" % (follower))
+
+        my_bot.auto_unfollow_nonfollowers()
 
     if command == 'unf':
         non_unfollow = []
